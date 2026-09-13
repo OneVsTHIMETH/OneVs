@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinanceMe Calculator</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#0b1020;
+    color:#fff;
+    min-height:100vh;
+    padding:25px 15px;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+}
+
+/* SECURITY */
+
+#securityScreen{
+    min-height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.security-box{
+    width:100%;
+    max-width:420px;
+    background:#151c31;
+    padding:35px 30px;
+    border-radius:20px;
+    border:1px solid #2c3858;
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+    text-align:center;
+}
+
+.security-icon{
+    font-size:55px;
+    margin-bottom:15px;
+}
+
+.security-box h1{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.security-box p{
+    color:#9ba7c0;
+    margin-bottom:25px;
+}
+
+.security-box input{
+    width:100%;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid #394765;
+    background:#0d1427;
+    color:#fff;
+    font-size:18px;
+    text-align:center;
+    outline:none;
+    margin-bottom:15px;
+}
+
+.unlock-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:#fff;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.unlock-btn:hover{
+    background:#1d4ed8;
+}
+
+.error{
+    color:#ff6b6b;
+    margin-top:12px;
+    display:none;
+}
+
+/* CALCULATOR */
+
+#calculator{
+    display:none;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:38px;
+    margin-bottom:8px;
+}
+
+.header p{
+    color:#9ba7c0;
+    font-size:16px;
+}
+
+/* CARD */
+
+.card{
+    background:#151c31;
+    border:1px solid #2c3858;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    margin-bottom:25px;
+}
+
+.card-title{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:22px;
+}
+
+/* FORM */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-size:14px;
+    font-weight:bold;
+    color:#cbd5e1;
+    margin-bottom:8px;
+}
+
+.form-group input{
+    width:100%;
+    padding:14px;
+    background:#0d1427;
+    border:1px solid #394765;
+    color:#fff;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+.form-group input:focus{
+    border-color:#5b8cff;
+}
+
+/* DOWN PAYMENT */
+
+.dp-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+    flex-wrap:wrap;
+}
+
+.dp-btn{
+    flex:1;
+    min-width:90px;
+    padding:12px;
+    background:#202a43;
+    color:#fff;
+    border:1px solid #3b4a6b;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.dp-btn:hover{
+    background:#2d3b5d;
+}
+
+.dp-btn.active{
+    background:#2563eb;
+    border-color:#2563eb;
+}
+
+/* BUTTONS */
+
+.action-buttons{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+}
+
+.calculate-btn,
+.reset-btn{
+    flex:1;
+    padding:16px;
+    border:none;
+    border-radius:10px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.calculate-btn{
+    background:#16a34a;
+    color:#fff;
+}
+
+.calculate-btn:hover{
+    background:#15803d;
+}
+
+.reset-btn{
+    background:#374151;
+    color:#fff;
+}
+
+.reset-btn:hover{
+    background:#4b5563;
+}
+
+/* SUMMARY */
+
+.summary{
+    display:none;
+}
+
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.summary-item{
+    background:#0d1427;
+    border:1px solid #2e3b5b;
+    border-radius:12px;
+    padding:17px;
+}
+
+.summary-item .label{
+    color:#94a3b8;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+.summary-item .value{
+    font-size:19px;
+    font-weight:bold;
+    color:#fff;
+}
+
+/* TABLE */
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+    border-radius:12px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+}
+
+thead{
+    background:#202a43;
+}
+
+th,
+td{
+    padding:14px 12px;
+    text-align:center;
+    border-bottom:1px solid #2d3955;
+}
+
+th{
+    color:#dbeafe;
+    font-size:14px;
+}
+
+td{
+    color:#e5e7eb;
+    font-size:14px;
+}
+
+tbody tr:hover{
+    background:#19233a;
+}
+
+/* MESSAGE */
+
+.message{
+    padding:14px;
+    border-radius:10px;
+    margin-bottom:20px;
+    display:none;
+}
+
+.error-message{
+    background:#3b1515;
+    border:1px solid #7f1d1d;
+    color:#fca5a5;
+}
+
+/* FOOTER */
+
+.footer{
+    text-align:center;
+    color:#64748b;
+    font-size:13px;
+    padding:15px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:800px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .header h1{
+        font-size:30px;
+    }
+
+    .card{
+        padding:22px;
+    }
+}
+
+@media(max-width:500px){
+
+    body{
+        padding:15px 10px;
+    }
+
+    .security-box{
+        padding:25px 20px;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:15px;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+
+    .action-buttons{
+        flex-direction:column;
+    }
+
+    .dp-btn{
+        min-width:80px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SECURITY SCREEN
+===================================================== -->
+
+<div id="securityScreen">
+
+    <div class="security-box">
+
+        <div class="security-icon">🔐</div>
+
+        <h1>FinanceMe Calculator</h1>
+
+        <p>Enter security code to continue</p>
+
+        <input
+            type="password"
+            id="securityCode"
+            placeholder="Enter security code"
+            maxlength="4"
+            inputmode="numeric"
+        >
+
+        <button
+            class="unlock-btn"
+            onclick="unlockCalculator()"
+        >
+            Unlock Calculator
+        </button>
+
+        <div
+            class="error"
+            id="securityError"
+        >
+            Incorrect security code
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CALCULATOR
+===================================================== -->
+
+<div id="calculator">
+
+    <div class="container">
+
+        <div class="header">
+
+            <h1>FinanceMe Calculator</h1>
+
+            <p>
+                Vehicle Finance & Personal Loan Calculator
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             INPUT CARD
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-title">
+                Finance Details
+            </div>
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <div class="form-grid">
+
+
+                <!-- MOTOR BIKE PRICE -->
+
+                <div class="form-group">
+
+                    <label for="MBP">
+                        Motor Bike Price (Rs.)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="MBP"
+                        placeholder="Enter motor bike price"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <!-- DOWN PAYMENT -->
+
+                <div class="form-group">
+
+                    <label for="DP">
+                        Down Payment (Rs.)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="DP"
+                        placeholder="Enter down payment"
+                        min="0"
+                        oninput="updateDownPaymentButtons()"
+                    >
+
+                    <div class="dp-buttons">
+
+                        <button
+                            class="dp-btn"
+                            onclick="setDownPayment(40)"
+                            id="dp40"
+                        >
+                            40%
+                        </button>
+
+                        <button
+                            class="dp-btn"
+                            onclick="setDownPayment(60)"
+                            id="dp60"
+                        >
+                            60%
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- IRR -->
+
+                <div class="form-group">
+
+                    <label for="IRR">
+                        Vehicle Loan IRR (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="IRR"
+                        value="24"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- OTHER CHARGES -->
+
+                <div class="form-group">
+
+                    <label for="OC">
+                        Other Charges (Rs.)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="OC"
+                        value="2520"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+                <!-- COMMISSION OPTIONS -->
+
+                <div class="form-group">
+
+                    <label>Commission Option</label>
+
+                    <div class="dp-buttons">
+                        <button type="button"
+                                class="dp-btn active"
+                                id="commissionRateBtn"
+                                onclick="selectCommissionOption('rate')">
+                            Rate %
+                        </button>
+
+                        <button type="button"
+                                class="dp-btn"
+                                id="commissionFixedBtn"
+                                onclick="selectCommissionOption('fixed')">
+                            Rs. 50,000
+                        </button>
+                    </div>
+
+                    <input type="number"
+                           id="commissionRate"
+                           value="4"
+                           min="0"
+                           max="100"
+                           step="0.01"
+                           style="margin-top:10px;">
+
+                    <input type="hidden" id="commissionOption" value="rate">
+
+                </div>
+
+                <!-- PERSONAL LOAN RATE -->
+
+                <div class="form-group">
+
+                    <label for="PLL">
+                        Personal Loan Rate (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="PLL"
+                        value="26"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+                <!-- MANUAL INSURANCE -->
+
+                <div class="form-group">
+
+                    <label for="IN">
+                        Insurance (Rs.)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="IN"
+                        placeholder="Enter insurance amount"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ACTION BUTTONS -->
+
+            <div class="action-buttons">
+
+                <button
+                    class="calculate-btn"
+                    onclick="calculateFinance()"
+                >
+                    Calculate Finance
+                </button>
+
+                <button
+                    class="reset-btn"
+                    onclick="resetCalculator()"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FINANCE SUMMARY
+        ================================================== -->
+
+        <div
+            class="card summary"
+            id="summary"
+        >
+
+            <div class="card-title">
+                Finance Summary
+            </div>
+
+            <div
+                class="summary-grid"
+                id="summaryGrid"
+            >
+            </div>
+
+
+            <div class="card-title">
+                Monthly Payment Options
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead id="tableHead">
+                    </thead>
+
+                    <tbody id="tableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer">
+            FinanceMe Calculator
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SECURITY CODE
+===================================================== */
+
+const SECURITY_CODE = "7777";
+
+
+function unlockCalculator(){
+
+    const code =
+        document.getElementById(
+            "securityCode"
+        ).value;
+
+    const error =
+        document.getElementById(
+            "securityError"
+        );
+
+
+    if(code === SECURITY_CODE){
+
+        document.getElementById(
+            "securityScreen"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "calculator"
+        ).style.display = "block";
+
+
+        error.style.display = "none";
+
+    }else{
+
+        error.style.display = "block";
+
+    }
+
+}
+
+
+/* Enter key */
+
+document.getElementById(
+    "securityCode"
+).addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            unlockCalculator();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   DOWN PAYMENT BUTTONS
+===================================================== */
+
+function setDownPayment(percent){
+
+    const price =
+        parseFloat(
+            document.getElementById("MBP").value
+        );
+
+
+    if(!price || price <= 0){
+
+        showMessage(
+            "Please enter the motor bike price first.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const dp =
+        price * percent / 100;
+
+
+    document.getElementById("DP").value =
+        Math.round(dp * 100) / 100;
+
+
+    updateDownPaymentButtons();
+
+}
+
+
+function updateDownPaymentButtons(){
+
+    const price =
+        parseFloat(
+            document.getElementById("MBP").value
+        ) || 0;
+
+
+    const dp =
+        parseFloat(
+            document.getElementById("DP").value
+        ) || 0;
+
+
+    const dp40 =
+        document.getElementById("dp40");
+
+    const dp60 =
+        document.getElementById("dp60");
+
+
+    dp40.classList.remove("active");
+
+    dp60.classList.remove("active");
+
+
+    if(price > 0){
+
+        const percent =
+            dp / price * 100;
+
+
+        if(Math.abs(percent - 40) < 0.01){
+
+            dp40.classList.add("active");
+
+        }
+
+
+        if(Math.abs(percent - 60) < 0.01){
+
+            dp60.classList.add("active");
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   EMI
+===================================================== */
+
+function calculateEMI(
+    principal,
+    annualRate,
+    months
+){
+
+    if(principal <= 0){
+
+        return 0;
+
+    }
+
+
+    const r =
+        annualRate / 12 / 100;
+
+
+    if(r === 0){
+
+        return principal / months;
+
+    }
+
+
+    const power =
+        Math.pow(
+            1 + r,
+            months
+        );
+
+
+    const emi =
+        principal *
+        r *
+        power /
+        (power - 1);
+
+
+    return emi;
+
+}
+
+
+/* =====================================================
+   NUMBER FORMAT
+===================================================== */
+
+function formatNumber(number){
+
+    return Number(number).toLocaleString(
+        "en-US",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    type
+){
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    message.innerHTML = text;
+
+
+    message.className =
+        "message " +
+        (
+            type === "error"
+            ? "error-message"
+            : ""
+        );
+
+
+    message.style.display =
+        "block";
+
+}
+
+
+function hideMessage(){
+
+    document.getElementById(
+        "message"
+    ).style.display = "none";
+
+}
+
+
+/* =====================================================
+   COMMISSION OPTIONS
+===================================================== */
+
+function selectCommissionOption(option){
+
+    const rateBtn = document.getElementById("commissionRateBtn");
+    const fixedBtn = document.getElementById("commissionFixedBtn");
+    const rateInput = document.getElementById("commissionRate");
+    const optionInput = document.getElementById("commissionOption");
+
+    optionInput.value = option;
+
+    rateBtn.classList.remove("active");
+    fixedBtn.classList.remove("active");
+
+    if(option === "rate"){
+        rateBtn.classList.add("active");
+        rateInput.disabled = false;
+        rateInput.style.opacity = "1";
+    }else{
+        fixedBtn.classList.add("active");
+        rateInput.disabled = true;
+        rateInput.style.opacity = "0.5";
+    }
+}
+
+
+/* =====================================================
+   MAIN FINANCE CALCULATION
+===================================================== */
+
+function calculateFinance(){
+
+    hideMessage();
+
+
+    /* INPUTS */
+
+    const MBP =
+        parseFloat(
+            document.getElementById("MBP").value
+        );
+
+
+    const DP =
+        parseFloat(
+            document.getElementById("DP").value
+        );
+
+
+    const IRR =
+        parseFloat(
+            document.getElementById("IRR").value
+        );
+
+
+    const OC =
+        parseFloat(
+            document.getElementById("OC").value
+        );
+
+
+    const commissionRate =
+        parseFloat(
+            document.getElementById(
+                "commissionRate"
+            ).value
+        );
+
+
+    const PLL =
+        parseFloat(
+            document.getElementById("PLL").value
+        );
+
+
+    const IN =
+        parseFloat(
+            document.getElementById("IN").value
+        );
+
+
+    /* VALIDATION */
+
+    if(!MBP || MBP <= 0){
+
+        showMessage(
+            "Please enter a valid motor bike price.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(isNaN(DP)){
+
+        showMessage(
+            "Please enter the down payment.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* MINIMUM 40% */
+
+    if(DP < MBP * 0.40){
+
+        showMessage(
+            "Minimum down payment is 40% of the motor bike price.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(DP > MBP){
+
+        showMessage(
+            "Down payment cannot be greater than the motor bike price.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(isNaN(IRR) || IRR < 0){
+
+        showMessage(
+            "Please enter a valid IRR rate.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(isNaN(OC) || OC < 0){
+
+        showMessage(
+            "Please enter valid other charges.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        isNaN(commissionRate) ||
+        commissionRate < 0
+    ){
+
+        showMessage(
+            "Please enter a valid commission rate.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(isNaN(PLL) || PLL < 0){
+
+        showMessage(
+            "Please enter a valid personal loan rate.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* MANUAL INSURANCE */
+
+    if(isNaN(IN) || IN < 0){
+
+        showMessage(
+            "Please enter a valid insurance amount.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* COMMISSION */
+
+    const commissionOption =
+        document.getElementById("commissionOption").value;
+
+    let COM;
+
+    if(commissionOption === "fixed"){
+        COM = 50000;
+    }else{
+        COM = MBP * commissionRate / 100;
+    }
+
+
+    /* DOWN PAYMENT % */
+
+    const PR =
+        DP / MBP * 100;
+
+
+    /* =================================================
+       DP >= 60%
+       VEHICLE LOAN ONLY
+    ================================================= */
+
+    if(PR >= 60){
+
+        const A =
+            MBP - DP;
+
+
+        const LA =
+            A +
+            COM +
+            IN +
+            OC;
+
+
+        createVehicleOnlyResults({
+
+            MBP,
+            DP,
+            PR,
+            IN,
+            OC,
+            COM,
+            LA,
+            IRR
+
+        });
+
+    }
+
+
+    /* =================================================
+       DP < 60%
+       VEHICLE + PERSONAL LOAN
+    ================================================= */
+
+    else{
+
+        const EX = 40;
+
+
+        const LR =
+            100 - PR;
+
+
+        const PL =
+            LR - EX;
+
+
+        /* Vehicle loan base */
+
+        const A =
+            MBP * EX / 100;
+
+
+        /* Personal loan */
+
+        const B =
+            MBP * PL / 100;
+
+
+        /* Vehicle loan including charges */
+
+        const LA =
+            A +
+            COM +
+            IN +
+            OC;
+
+
+        createCombinedResults({
+
+            MBP,
+            DP,
+            PR,
+            IN,
+            OC,
+            COM,
+            LA,
+            IRR,
+            B,
+            PLL
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   VEHICLE ONLY RESULTS
+===================================================== */
+
+function createVehicleOnlyResults(data){
+
+    const {
+        MBP,
+        DP,
+        PR,
+        IN,
+        OC,
+        COM,
+        LA,
+        IRR
+    } = data;
+
+
+    const summary =
+        document.getElementById(
+            "summary"
+        );
+
+
+    summary.style.display =
+        "block";
+
+
+    const summaryGrid =
+        document.getElementById(
+            "summaryGrid"
+        );
+
+
+    summaryGrid.innerHTML = `
+
+        <div class="summary-item">
+            <div class="label">
+                Vehicle Price
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(MBP)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Down Payment
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(DP)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Down Payment %
+            </div>
+            <div class="value">
+                ${PR.toFixed(2)}%
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Insurance
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(IN)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Other Charges
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(OC)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Commission
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(COM)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Lease / Vehicle Loan
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(LA)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                IRR
+            </div>
+            <div class="value">
+                ${IRR.toFixed(2)}%
+            </div>
+        </div>
+
+    `;
+
+
+    createVehicleTable(
+        LA,
+        IRR
+    );
+
+
+    summary.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+
+}
+
+
+/* =====================================================
+   COMBINED RESULTS
+   DP < 60%
+===================================================== */
+
+function createCombinedResults(data){
+
+    const {
+        MBP,
+        DP,
+        PR,
+        IN,
+        OC,
+        COM,
+        LA,
+        IRR,
+        B,
+        PLL
+    } = data;
+
+
+    const summary =
+        document.getElementById(
+            "summary"
+        );
+
+
+    summary.style.display =
+        "block";
+
+
+    const summaryGrid =
+        document.getElementById(
+            "summaryGrid"
+        );
+
+
+    summaryGrid.innerHTML = `
+
+        <div class="summary-item">
+            <div class="label">
+                Vehicle Price
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(MBP)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Down Payment
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(DP)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Down Payment %
+            </div>
+            <div class="value">
+                ${PR.toFixed(2)}%
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Insurance
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(IN)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Other Charges
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(OC)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Commission
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(COM)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Lease / Vehicle Loan
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(LA)}
+            </div>
+        </div>
+
+        <!-- PERSONAL LOAN -->
+
+        <div class="summary-item">
+            <div class="label">
+                Personal Loan
+            </div>
+            <div class="value">
+                Rs. ${formatNumber(B)}
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                IRR
+            </div>
+            <div class="value">
+                ${IRR.toFixed(2)}%
+            </div>
+        </div>
+
+        <div class="summary-item">
+            <div class="label">
+                Personal Loan Rate
+            </div>
+            <div class="value">
+                ${PLL.toFixed(2)}%
+            </div>
+        </div>
+
+    `;
+
+
+    createCombinedTable(
+        LA,
+        B,
+        IRR,
+        PLL
+    );
+
+
+    summary.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+
+}
+
+
+/* =====================================================
+   VEHICLE TABLE
+===================================================== */
+
+function createVehicleTable(
+    LA,
+    IRR
+){
+
+    const tableHead =
+        document.getElementById(
+            "tableHead"
+        );
+
+
+    const tableBody =
+        document.getElementById(
+            "tableBody"
+        );
+
+
+    tableHead.innerHTML = `
+
+        <tr>
+
+            <th>Period</th>
+
+            <th>
+                Vehicle Loan Monthly
+            </th>
+
+            <th>
+                Total Monthly Payment
+            </th>
+
+            <th>
+                Total Payment
+            </th>
+
+            <th>
+                Total Interest
+            </th>
+
+        </tr>
+
+    `;
+
+
+    tableBody.innerHTML = "";
+
+
+    const periods =
+        [12,24,36,48,60,72];
+
+
+    periods.forEach(
+        function(months){
+
+            const EMI =
+                calculateEMI(
+                    LA,
+                    IRR,
+                    months
+                );
+
+
+            const totalPayment =
+                EMI * months;
+
+
+            const totalInterest =
+                totalPayment - LA;
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${months} Months
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(EMI)}
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(EMI)}
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(totalPayment)}
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(totalInterest)}
+                </td>
+
+            `;
+
+
+            tableBody.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   COMBINED TABLE
+===================================================== */
+
+function createCombinedTable(
+    LA,
+    B,
+    IRR,
+    PLL
+){
+
+    const tableHead =
+        document.getElementById(
+            "tableHead"
+        );
+
+
+    const tableBody =
+        document.getElementById(
+            "tableBody"
+        );
+
+
+    tableHead.innerHTML = `
+
+        <tr>
+
+            <th>Period</th>
+
+            <th>
+                Vehicle Loan Monthly Payment
+            </th>
+
+            <th>
+                Personal Loan Monthly Payment
+            </th>
+
+            <th>
+                Total Monthly Payment
+            </th>
+
+            <th>
+                Total Payment
+            </th>
+
+            <th>
+                Total Interest
+            </th>
+
+        </tr>
+
+    `;
+
+
+    tableBody.innerHTML = "";
+
+
+    const periods =
+        [12,24,36,48,60,72];
+
+
+    periods.forEach(
+        function(months){
+
+            const vehicleEMI =
+                calculateEMI(
+                    LA,
+                    IRR,
+                    months
+                );
+
+
+            const personalEMI =
+                calculateEMI(
+                    B,
+                    PLL,
+                    months
+                );
+
+
+            const totalMonthly =
+                vehicleEMI +
+                personalEMI;
+
+
+            const totalPayment =
+                totalMonthly * months;
+
+
+            const totalPrincipal =
+                LA + B;
+
+
+            const totalInterest =
+                totalPayment -
+                totalPrincipal;
+
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${months} Months
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(vehicleEMI)}
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(personalEMI)}
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(totalMonthly)}
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(totalPayment)}
+                </td>
+
+                <td>
+                    Rs. ${formatNumber(totalInterest)}
+                </td>
+
+            `;
+
+
+            tableBody.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+function resetCalculator(){
+
+    document.getElementById("MBP").value = "";
+
+    document.getElementById("DP").value = "";
+
+    document.getElementById("IRR").value = "24";
+
+    document.getElementById("OC").value = "2520";
+
+    document.getElementById(
+        "commissionRate"
+    ).value = "4";
+
+    selectCommissionOption("rate");
+
+    /* PLL = 26% */
+
+    document.getElementById("PLL").value = "26";
+
+    document.getElementById("IN").value = "";
+
+
+    document.getElementById(
+        "summary"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "summaryGrid"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "tableHead"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "tableBody"
+    ).innerHTML = "";
+
+
+    hideMessage();
+
+    updateDownPaymentButtons();
+
+}
+
+</script>
+
+</body>
+</html>
