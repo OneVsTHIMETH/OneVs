@@ -8,4 +8,4 @@ binding = "AI"
 [vars]
 # Change this to the exact URL where you host the Studio. Multiple origins are comma-separated.
 # For local testing, keep http://localhost:8000.
-ALLOWED_ORIGIN = "http://localhost:8000"
+ALLOWED_ORIGIN = "https://onevs.pages.dev"
