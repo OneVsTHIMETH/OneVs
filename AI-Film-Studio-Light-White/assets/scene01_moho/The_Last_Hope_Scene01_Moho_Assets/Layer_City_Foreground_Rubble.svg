@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><defs>
+<linearGradient id="space" x2="1" y2="1"><stop stop-color="#06172d"/><stop offset="1" stop-color="#020611"/></linearGradient>
+<radialGradient id="ocean"><stop stop-color="#70d4f2"/><stop offset=".65" stop-color="#176b9c"/><stop offset="1" stop-color="#061b3a"/></radialGradient>
+<linearGradient id="sky" x2="0" y2="1"><stop stop-color="#f6a36e"/><stop offset=".55" stop-color="#704455"/><stop offset="1" stop-color="#17243a"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#ffe39a" stop-opacity=".9"/><stop offset="1" stop-color="#ff4b1e" stop-opacity="0"/></radialGradient>
+</defs><g fill="#242a36" stroke="#101725" stroke-width="8"><path d="M0 930l150-110 120 80 130-45 120 225H0z"/><path d="M1920 900l-150-80-100 90-140-50-120 220h510z"/><path d="M480 1080l140-150 140 100 80 50z"/></g></svg>
