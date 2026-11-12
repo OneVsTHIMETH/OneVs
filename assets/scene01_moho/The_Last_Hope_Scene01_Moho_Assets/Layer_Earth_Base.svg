@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><defs>
+<linearGradient id="space" x2="1" y2="1"><stop stop-color="#06172d"/><stop offset="1" stop-color="#020611"/></linearGradient>
+<radialGradient id="ocean"><stop stop-color="#70d4f2"/><stop offset=".65" stop-color="#176b9c"/><stop offset="1" stop-color="#061b3a"/></radialGradient>
+<linearGradient id="sky" x2="0" y2="1"><stop stop-color="#f6a36e"/><stop offset=".55" stop-color="#704455"/><stop offset="1" stop-color="#17243a"/></linearGradient>
+<radialGradient id="glow"><stop stop-color="#ffe39a" stop-opacity=".9"/><stop offset="1" stop-color="#ff4b1e" stop-opacity="0"/></radialGradient>
+</defs><circle cx="970" cy="520" r="350" fill="url(#ocean)" stroke="#8be5ff" stroke-width="12"/>
+<path d="M720 330l75-65 90 10 45 65-65 55-80 5-65 50-55-45z M1000 280l90-25 85 55 25 75-70 45-55-35-55 20-45-55z M1110 500l100-40 65 55-25 80-75 35-65-60z M790 590l85-35 65 65-20 90-60 55-55-70z M1030 680l70-30 85 55-5 90-80 35-60-75z" fill="#7ba77d" stroke="#c3d9a0" stroke-width="6"/>
+<path d="M650 450q160-80 300 0t330 0M680 610q170-70 330 0t300-20" fill="none" stroke="#e4f8ff" stroke-width="20" opacity=".35"/></svg>
