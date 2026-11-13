@@ -1,0 +1,7 @@
+name = "ai-film-studio-legacy-gateway-disabled"
+main = "worker.js"
+compatibility_date = "2026-11-09"
+
+[vars]
+# This legacy gateway intentionally has no AI binding and no provider secrets.
+ALLOWED_ORIGIN = "https://onevs.pages.dev,http://localhost:8000"

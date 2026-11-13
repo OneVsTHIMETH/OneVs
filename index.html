@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>AI Film Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="brand-mark">✦</span><span>AI Film <b>Studio</b></span></a>
+    <div class="workspace-label">WORKSPACE</div>
+    <nav id="mainNav">
+      <button class="nav-item active" data-page="dashboard"><span>▦</span> Overview</button>
+      <button class="nav-item" data-page="characters"><span>♙</span> Character Studio</button>
+      <button class="nav-item" data-page="creator"><span>▶</span> Video Creator</button>
+      <button class="nav-item" data-page="editor"><span>◫</span> Film Editor</button>
+      <button class="nav-item" data-page="projects"><span>▤</span> My Projects</button>
+      <button class="nav-item" data-page="api-manager"><span>⌘</span> API Manager</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="plan-card"><span class="sparkle">✧</span><b>Studio workspace</b><p>Connect your AI providers to enable generation.</p><button class="text-button" data-page="api-manager">Configure APIs →</button></div>
+      <div class="profile"><div class="avatar">AF</div><div><b>My Studio</b><small>Local workspace</small></div><span class="status-dot"></span></div>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div><div class="eyebrow">CREATIVE WORKSPACE</div><h1 id="pageTitle">Overview</h1></div>
+      <div class="top-actions"><span class="connection-pill"><i></i><span id="connectionText">Local preview</span></span><button class="icon-button" title="Notifications">♧</button><button class="primary-button small" data-page="creator">＋ New video</button></div>
+    </header>
+
+    <section class="page active" id="page-dashboard">
+      <div class="welcome-banner"><div><span class="banner-kicker">YOUR AI PRODUCTION SPACE</span><h2>Turn your ideas into<br><em>cinematic stories.</em></h2><p>Create reusable characters, generate storyboards and scene images, then prepare your film in one workspace.</p><button class="white-button" data-page="creator">Create a video <span>→</span></button></div><div class="banner-art"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="banner-play">▶</div><div class="banner-caption">IDEA → SCENE → FILM</div></div></div>
+      <div class="section-heading"><div><h2>Your creative tools</h2><p>Everything you need to produce an AI film.</p></div></div>
+      <div class="tool-grid">
+        <button class="tool-card" data-page="characters"><span class="tool-icon lilac">♙</span><b>Character Studio</b><p>Build characters and save visual references.</p><span class="card-arrow">↗</span></button>
+        <button class="tool-card" data-page="creator"><span class="tool-icon blue">▶</span><b>Video Creator</b><p>Generate storyboards and cinematic scene images.</p><span class="card-arrow">↗</span></button>
+        <button class="tool-card" data-page="editor"><span class="tool-icon peach">◫</span><b>Film Editor</b><p>Arrange scenes, dialogue and audio tracks.</p><span class="card-arrow">↗</span></button>
+        
+      </div>
+      <div class="section-heading space-top"><div><h2>Recent projects</h2><p>Your latest film work appears here.</p></div><button class="text-button" data-page="projects">View all →</button></div>
+      <div id="recentProjects" class="project-grid"><div class="empty-state">No projects yet. Start by creating your first video.</div></div>
+    </section>
+
+    <section class="page" id="page-characters">
+      <div class="page-intro"><div><h2>Your character library</h2><p>Create reusable characters with names and reference images.</p></div><button class="primary-button" id="newCharacterBtn">＋ Create character</button></div>
+      <div class="notice"><b>Character consistency tip</b><span>Upload a clear reference image. You can view, reuse or delete saved characters. A reference image is optional; AI can invent characters from your story.</span></div>
+      <div id="characterGrid" class="character-grid"><div class="empty-state">Your saved characters will appear here.</div></div>
+      <div class="panel form-panel" id="characterForm" hidden>
+        <div class="panel-heading"><div><h3 id="characterFormTitle">Create a character</h3><p>Upload the full character reference image and give it a name.</p></div><button class="icon-button" id="closeCharacterForm">✕</button></div>
+        <form id="characterCreateForm">
+          <div class="form-grid">
+            <label>Character name<input id="characterName" required maxlength="50" placeholder="e.g. Kamal"></label>
+            <label class="full">Full character reference image<input id="characterImage" type="file" accept="image/*"></label>
+          </div>
+          <div class="form-actions"><button type="button" class="secondary-button" id="cancelCharacter">Cancel</button><button class="primary-button" type="submit" id="saveCharacterButton">Save character</button></div>
+          <p class="helper" id="characterFormMessage">In local preview, characters are stored in this browser. Connect Supabase for cloud storage and multi-device access.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="page" id="page-creator">
+      <div class="page-intro"><div><h2>Create a new film</h2><p>Describe your film in text. AI creates the scenes and their visual concepts, even if you have not created any characters.</p></div><span class="soft-tag">Custom duration · Text-to-storyboard</span></div>
+      <div class="creator-layout">
+        <div class="panel">
+          <div class="panel-heading"><div><h3>Project setup</h3><p>Start with a title and creative direction.</p></div></div>
+          <form id="projectForm" class="stack-form">
+            <label>Project Name<input id="projectTitle" required placeholder="e.g. The Last Hope"></label>
+            <label>Story<textarea id="projectPrompt" rows="6" placeholder="Write the complete story here: beginning, events, conflict, climax and ending..."></textarea></label>
+            <label>Overall Direction<textarea id="projectDirection" rows="4" placeholder="Describe the animation style, mood, visual look, camera style, atmosphere and creative rules..."></textarea></label>
+            <div class="character-setup-block">
+              <h3>Story character analysis <span class="soft-tag">AI assisted</span></h3>
+              <p class="helper">Story එකේ නම් හඳුනාගත් පසු, Character Studio එකට upload කළ full character image එක තෝරන්න.</p>
+              <button type="button" class="secondary-button" id="analyzeStoryBtn">✦ Analyse Story & Find Characters</button>
+              <span class="helper" id="characterAnalysisStatus">Write your Story first, then analyse it to find character names.</span>
+              <div id="storyCharacterMap" class="story-character-map"><p class="helper">Analyse Story කළාම characters මෙතැන පෙන්වයි.</p></div>
+            </div>
+            <div class="two-col"><label>Language<select id="projectLanguage"><option value="si">Sinhala</option><option value="en">English</option><option value="both">Sinhala + English</option></select></label><label>Aspect ratio<select id="projectRatio"><option>16:9</option><option>9:16</option><option>1:1</option></select></label></div>
+            <label>Target duration (seconds)<input id="projectDuration" type="number" min="10" max="3600" step="5" value="300" required><small class="helper">Choose any duration from 10 seconds to 60 minutes.</small></label>
+            <button class="primary-button" type="submit">Create Project & Continue →</button>
+          </form>
+        </div>
+        <div class="panel guide-panel"><span class="tool-icon blue">✦</span><h3>How scene generation works</h3><ol><li>Write your story in the Story field.</li><li>Add visual style and creative rules in Overall Direction.</li><li>AI plans scenes to fit your target duration.</li><li>Click Analyse Story, then map each story character name to a saved Studio character or let AI invent it.</li><li>Story එකේ සෑම චරිතයකටම Character Studio හි upload කළ full reference image එකක් තෝරන්න.</li><li>AI generation is available only after you connect the relevant custom API in API Manager.</li><li>Edit, save and export your storyboard.</li></ol></div>
+      </div>
+      <div class="panel scenes-panel" id="sceneBuilder" hidden>
+        <div class="panel-heading"><div><h3>Scene builder</h3><p>Add scene prompts and dialogue to your project.</p></div><div class="form-actions"><button class="secondary-button" id="draftScenesBtn">Draft locally</button><button class="primary-button" id="aiDraftScenesBtn">✦ Generate Story · Scenes + Artwork</button><button class="secondary-button" id="addSceneBtn">＋ Add scene</button></div></div><div class="notice compact"><b>Automatic Option 1 workflow</b><span>AI creates the storyboard and automatically generates Image Option 1 for every scene. For English dialogue, it also attempts Voice Option 1. It stops after the first option: use Generate Another only when you want another take. Video, voice, music and SFX require their own connected custom APIs. No default AI provider is used.</span></div>
+        <div id="sceneList"></div>
+        <div class="form-actions"><button class="secondary-button" id="exportScriptBtn">↓ Export screenplay</button><button class="secondary-button" id="exportProjectBtn">↓ Export project JSON</button><button class="primary-button" id="saveScenesBtn">Save scenes</button></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-editor">
+      <div class="page-intro"><div><h2>Film editor</h2><p>Build your final film with AI Auto Edit or edit every clip manually on a multi-track timeline.</p></div><div class="editor-top-actions"><button class="secondary-button" id="refreshTimeline">↻ Refresh</button><button class="primary-button" id="editorExportBtn">⇩ Export film</button></div></div>
+      <div class="film-editor-shell">
+        <div class="film-editor-toolbar">
+          <div class="film-editor-project"><span class="editor-live-dot"></span><div><b id="filmEditorProjectName">No project selected</b><small id="filmEditorMeta">Create or open a project to start editing</small></div></div>
+          <div class="film-editor-actions"><button class="editor-tool-btn" id="editorAutoEdit">✦ Auto Edit</button><button class="editor-tool-btn" id="editorAddMedia">＋ Add media</button><input id="editorMediaInput" type="file" accept="video/*,audio/*,image/*" multiple hidden><button class="editor-tool-btn" id="editorAddText">T Add title</button><button class="editor-tool-btn" id="editorUndo">↶ Undo</button></div>
+        </div>
+        <div class="film-editor-workspace">
+          <aside class="editor-media-bin"><div class="editor-panel-title"><b>Media library</b><button class="editor-mini-btn" id="editorImportBtn">＋</button></div><p class="editor-muted">Project scenes and imported media</p><div id="editorMediaList" class="editor-media-list"><div class="editor-empty">Open a project to load scenes.</div></div></aside>
+          <section class="editor-preview-column">
+            <div class="editor-preview-head"><span>PREVIEW MONITOR</span><span id="editorPreviewTime">00:00 / 00:00</span></div>
+            <div class="editor-preview-stage"><canvas id="editorPreviewCanvas" width="1280" height="720"></canvas><div id="editorPreviewEmpty" class="editor-preview-empty">▶<b>Film preview</b><small>Add clips to the timeline or choose Auto Edit</small></div></div>
+            <div class="editor-transport"><div class="editor-transport-left"><button id="editorPlay" class="editor-play-btn" title="Play / pause">▶</button><button id="editorStop" class="editor-transport-btn">■</button><button id="editorBackFrame" class="editor-transport-btn">−5s</button><button id="editorForwardFrame" class="editor-transport-btn">+5s</button></div><div class="editor-transport-center"><b id="editorCurrentTime">00:00.0</b><span>/</span><span id="editorTotalTime">00:00.0</span></div><div class="editor-transport-right"><label>Ratio <select id="editorAspect"><option value="16:9">16:9</option><option value="9:16">9:16</option><option value="1:1">1:1</option></select></label><label>Zoom <select id="editorTimelineZoom"><option value="60">Fit</option><option value="90">1×</option><option value="150">2×</option><option value="240">4×</option></select></label></div></div>
+            <div class="editor-timeline-panel"><div class="editor-timeline-head"><div><b>EDITING TIMELINE</b><small>Drag clips to reorder · select a clip to edit</small></div><div class="editor-timeline-tools"><button id="editorSplit" title="Split at playhead">✂ Split</button><button id="editorDelete" title="Delete selected clip">⌫ Delete</button><button id="editorSnap" class="active" title="Snap to grid">⌖ Snap</button></div></div><div class="editor-ruler-wrap"><div class="editor-track-label-spacer"></div><div id="editorRuler" class="editor-ruler"></div></div><div id="editorTracks" class="editor-tracks"><div class="editor-empty">Your editing tracks will appear here.</div></div><div class="editor-playhead-row"><div class="editor-track-label-spacer"></div><input id="editorSeek" type="range" min="0" max="60" step="0.1" value="0" aria-label="Timeline playhead"></div></div>
+          </section>
+          <aside class="editor-inspector"><div class="editor-panel-title"><b>Inspector</b><span id="editorSelectedType">No selection</span></div><div id="editorInspectorBody" class="editor-inspector-body"><div class="editor-empty">Select a timeline clip to edit its properties.</div></div></aside>
+        </div>
+        <div class="editor-footer"><span>✦ AI Auto Edit creates a starting cut. Every clip remains manually editable.</span><span id="editorSaveStatus">Changes saved in this browser</span></div>
+      </div>
+      <div class="panel editor-audio-tools"><div class="panel-heading"><div><h3>Scene audio & generation tools</h3><p>Generate or replace music and sound effects for individual scenes.</p></div><span class="soft-tag">AI production tools</span></div><div id="timeline" class="timeline"><div class="empty-state">Open a project to manage scene audio.</div></div><div class="form-actions"><button class="secondary-button" id="autoAudioAll">✦ Auto-generate music + SFX for all scenes</button><button class="secondary-button" id="editorExportScript">↓ Export screenplay</button><button class="secondary-button" id="editorExportProject">↓ Export project JSON</button></div><div id="audioGenerationStatus" class="helper">Music, dialogue and SFX can be added to the timeline after generation.</div></div>
+      <div class="notice"><b>Export note</b><span>Browser export records the edited timeline as WebM. MP4/H.264 export can be added through a server-side FFmpeg renderer when you connect a rendering server. Browser export depends on your device's supported media codecs.</span></div>
+    </section>
+
+    <section class="page" id="page-projects"><div class="page-intro"><div><h2>My projects</h2><p>All projects saved in this workspace.</p></div><button class="primary-button" data-page="creator">＋ New project</button></div><div id="allProjects" class="project-grid"><div class="empty-state">No saved projects yet.</div></div></section>
+
+    <section class="page" id="page-api-manager">
+      <div class="page-intro"><div><h2>Custom API Manager</h2><p>Connect your own API endpoint separately for each AI capability. No provider is preselected or connected.</p></div><span class="soft-tag">BYO API · Supabase secured</span></div>
+      <div class="api-hero panel"><div><span class="banner-kicker">NO DEFAULT PROVIDERS</span><h2>Your APIs.<br><em>Your production.</em></h2><p>Every capability starts disconnected. Add your endpoint and API key, save it securely, then run a real connection test before using it.</p></div><div class="api-hero-mark"><span>✦</span><small>CUSTOM ROUTER</small></div></div>
+      <div class="api-security-note"><span class="api-security-icon">✓</span><div><b>Supabase encrypted secret storage</b><p>API keys are sent only to an authenticated Supabase Edge Function, encrypted server-side, and never returned to the browser. Configure the encryption secret before saving keys.</p></div></div>
+      <div class="api-section-head"><div><h3>Custom API connections</h3><p>Add multiple accounts per category, including several accounts from the same provider. Lower priority numbers are tried first.</p></div><button class="secondary-button" id="resetApiChoices">Clear all connections</button></div>
+      <div class="api-provider-grid">
+        <article class="api-provider-card" data-custom-api="text"><label>Provider name<input data-api-provider="text" placeholder="e.g. My AI Provider"></label><label>Account name<input data-api-account="text" placeholder="e.g. Main account"></label><label>Priority (1 = first)<input data-api-priority="text" type="number" min="1" max="999" value="100"></label><div class="api-provider-top"><span class="api-provider-icon composer-icon">Aa</span><span class="api-status-pill" data-api-status="text">Not connected</span></div><h3>Text AI & Data Analysis</h3><p>Story writing, story/character analysis, scene planning, prompt generation and text tasks.</p><label>API endpoint URL<input data-api-url="text" type="url" placeholder="https://api.example.com/v1/chat/completions"></label><label>Model<input data-api-model="text" placeholder="model-name"></label><label>API Key<input data-api-key="text" type="password" autocomplete="new-password" placeholder="Enter API key"></label><label>Authorization header<input data-api-auth="text" value="Authorization: Bearer" placeholder="Authorization: Bearer"></label><div class="api-card-foot"><button class="secondary-button" data-api-save="text">Save API</button><button class="secondary-button" data-api-test="text">Test Connection</button></div><p class="helper" data-api-message="text">Not connected. Save a key to enable text AI.</p></article>
+        <article class="api-provider-card" data-custom-api="image"><label>Provider name<input data-api-provider="image" placeholder="e.g. My AI Provider"></label><label>Account name<input data-api-account="image" placeholder="e.g. Main account"></label><label>Priority (1 = first)<input data-api-priority="image" type="number" min="1" max="999" value="100"></label><div class="api-provider-top"><span class="api-provider-icon image-icon">▧</span><span class="api-status-pill" data-api-status="image">Not connected</span></div><h3>Image Generation</h3><p>Text-to-image, character reference images, image editing and variations.</p><label>API endpoint URL<input data-api-url="image" type="url" placeholder="https://api.example.com/v1/images/generations"></label><label>Model<input data-api-model="image" placeholder="model-name"></label><label>API Key<input data-api-key="image" type="password" autocomplete="new-password" placeholder="Enter API key"></label><label>Authorization header<input data-api-auth="image" value="Authorization: Bearer"></label><div class="api-card-foot"><button class="secondary-button" data-api-save="image">Save API</button><button class="secondary-button" data-api-test="image">Test Connection</button></div><p class="helper" data-api-message="image">Not connected. Save a key to enable image generation.</p></article>
+        <article class="api-provider-card" data-custom-api="video"><label>Provider name<input data-api-provider="video" placeholder="e.g. My AI Provider"></label><label>Account name<input data-api-account="video" placeholder="e.g. Main account"></label><label>Priority (1 = first)<input data-api-priority="video" type="number" min="1" max="999" value="100"></label><div class="api-provider-top"><span class="api-provider-icon video-icon">▶</span><span class="api-status-pill" data-api-status="video">Not connected</span></div><h3>Video Generation</h3><p>Text-to-video, image-to-video, motion and cinematic clips.</p><label>API endpoint URL<input data-api-url="video" type="url" placeholder="https://api.example.com/video"></label><label>Model<input data-api-model="video" placeholder="model-name"></label><label>API Key<input data-api-key="video" type="password" autocomplete="new-password" placeholder="Enter API key"></label><label>Authorization header<input data-api-auth="video" value="Authorization: Bearer"></label><div class="api-card-foot"><button class="secondary-button" data-api-save="video">Save API</button><button class="secondary-button" data-api-test="video">Test Connection</button></div><p class="helper" data-api-message="video">Not connected. Save a key to enable video generation.</p></article>
+        <article class="api-provider-card" data-custom-api="voice"><label>Provider name<input data-api-provider="voice" placeholder="e.g. My AI Provider"></label><label>Account name<input data-api-account="voice" placeholder="e.g. Main account"></label><label>Priority (1 = first)<input data-api-priority="voice" type="number" min="1" max="999" value="100"></label><div class="api-provider-top"><span class="api-provider-icon voice-icon">♫</span><span class="api-status-pill" data-api-status="voice">Not connected</span></div><h3>Voice Generation</h3><p>Text-to-speech, narration, character voices and speech recognition.</p><label>API endpoint URL<input data-api-url="voice" type="url" placeholder="https://api.example.com/v1/audio/speech"></label><label>Model<input data-api-model="voice" placeholder="model-name"></label><label>API Key<input data-api-key="voice" type="password" autocomplete="new-password" placeholder="Enter API key"></label><label>Authorization header<input data-api-auth="voice" value="Authorization: Bearer"></label><div class="api-card-foot"><button class="secondary-button" data-api-save="voice">Save API</button><button class="secondary-button" data-api-test="voice">Test Connection</button></div><p class="helper" data-api-message="voice">Not connected. Save a key to enable voice generation.</p></article>
+        <article class="api-provider-card" data-custom-api="music"><label>Provider name<input data-api-provider="music" placeholder="e.g. My AI Provider"></label><label>Account name<input data-api-account="music" placeholder="e.g. Main account"></label><label>Priority (1 = first)<input data-api-priority="music" type="number" min="1" max="999" value="100"></label><div class="api-provider-top"><span class="api-provider-icon music-icon">♫</span><span class="api-status-pill" data-api-status="music">Not connected</span></div><h3>Music Generation</h3><p>Original scores, themes, loops and scene-specific music.</p><label>API endpoint URL<input data-api-url="music" type="url" placeholder="https://api.example.com/music"></label><label>Model<input data-api-model="music" placeholder="model-name"></label><label>API Key<input data-api-key="music" type="password" autocomplete="new-password" placeholder="Enter API key"></label><label>Authorization header<input data-api-auth="music" value="Authorization: Bearer"></label><div class="api-card-foot"><button class="secondary-button" data-api-save="music">Save API</button><button class="secondary-button" data-api-test="music">Test Connection</button></div><p class="helper" data-api-message="music">Not connected. Save a key to enable music generation.</p></article>
+        <article class="api-provider-card" data-custom-api="sfx"><label>Provider name<input data-api-provider="sfx" placeholder="e.g. My AI Provider"></label><label>Account name<input data-api-account="sfx" placeholder="e.g. Main account"></label><label>Priority (1 = first)<input data-api-priority="sfx" type="number" min="1" max="999" value="100"></label><div class="api-provider-top"><span class="api-provider-icon sfx-icon">◉</span><span class="api-status-pill" data-api-status="sfx">Not connected</span></div><h3>Sound Effects</h3><p>Footsteps, wind, rain, impacts, ambience and Foley.</p><label>API endpoint URL<input data-api-url="sfx" type="url" placeholder="https://api.example.com/sound-effects"></label><label>Model<input data-api-model="sfx" placeholder="model-name"></label><label>API Key<input data-api-key="sfx" type="password" autocomplete="new-password" placeholder="Enter API key"></label><label>Authorization header<input data-api-auth="sfx" value="Authorization: Bearer"></label><div class="api-card-foot"><button class="secondary-button" data-api-save="sfx">Save API</button><button class="secondary-button" data-api-test="sfx">Test Connection</button></div><p class="helper" data-api-message="sfx">Not connected. Save a key to enable sound effects.</p></article>
+      </div>
+      <div class="panel api-accounts-panel"><div class="panel-heading"><div><h3>Saved provider accounts</h3><p>Enable, test, prioritize or remove each account independently.</p></div><span class="soft-tag">Multi-account pools</span></div><div id="apiAccountsList" class="api-accounts-list"><p class="helper">Connect Supabase and sign in to load saved accounts.</p></div></div>
+      <div class="panel api-deploy-panel"><div class="panel-heading"><div><h3>Supabase setup</h3><p>Run the included SQL migration, deploy the Edge Function and set its encryption secret.</p></div><span class="soft-tag">One-time setup</span></div><ol><li>Create a new Supabase project.</li><li>Run <code>supabase/migrations/20261112_custom_api_vault.sql</code> and then <code>supabase/migrations/20261112_multi_provider_failover.sql</code> in SQL Editor.</li><li>Deploy <code>supabase/functions/custom-api-manager</code>.</li><li>Set <code>API_ENCRYPTION_KEY</code> as a Supabase Edge Function secret (32-byte base64 key), plus normal Supabase function environment variables.</li><li>Configure Supabase URL and anon key in Studio Settings, create/sign in to a user, then save and test each API.</li></ol><p class="helper">Each endpoint must implement the adapter contract in CUSTOM-API-SUPABASE-SETUP.md. Automatic failover tries the next tested compatible account only for explicit quota / credit exhaustion or HTTP 429. Ambiguous timeouts stop to avoid duplicate paid requests.</p></div>
+    </section>
+
+    <section class="page" id="page-settings">
+      <div class="page-intro"><div><h2>Studio settings</h2><p>Connect Supabase for account access, secure API storage and cloud projects.</p></div></div>
+      <div class="panel settings-panel"><h3>Account access</h3>
+        <p class="muted">Create an account or sign in to save your characters and projects in your private Supabase workspace.</p>
+        <label>Email address<input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></label>
+        <label>Password<input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"></label>
+        <div class="form-actions" style="justify-content:flex-start"><button class="primary-button" id="signInBtn">Sign in</button><button class="secondary-button" id="signUpBtn">Create account</button><button class="secondary-button" id="signOutBtn" hidden>Sign out</button></div>
+        <span id="authStatus" class="helper">Connect Supabase below, then sign in.</span>
+      </div>
+      <div class="panel settings-panel"><h3>Supabase connection</h3><p class="muted">The anon/publishable key is intended for browser use with Row Level Security enabled. Never put a service-role key or AI provider secret here.</p><label>Supabase project URL<input id="supabaseUrl" placeholder="https://your-project.supabase.co"></label><label>Supabase anon / publishable key<input id="supabaseKey" placeholder="sb_publishable_... or anon key"></label><button class="primary-button" id="saveSupabase">Save connection</button><span id="supabaseStatus" class="helper"></span></div>
+
+    </section>
+  </main>
+</div>
+<dialog id="characterDetailsDialog" class="character-details-dialog"><div class="panel-heading"><h3 id="characterDetailsTitle">Character details</h3><button class="icon-button" id="closeCharacterDetails" type="button">✕</button></div><div id="characterDetailsBody"></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/film-editor.js"></script>
+</body>
+</html>
