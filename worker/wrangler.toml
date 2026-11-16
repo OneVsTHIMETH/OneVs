@@ -1,0 +1,22 @@
+name = "ai-film-studio-gateway"
+main = "src/index.js"
+compatibility_date = "2026-11-15"
+
+[vars]
+ALLOWED_ORIGINS = "https://onevs.pages.dev"
+GEMINI_TEXT_MODEL = "gemini-2.5-flash"
+GEMINI_ANALYSIS_MODEL = "gemini-2.5-flash"
+HF_IMAGE_MODEL = "black-forest-labs/FLUX.1-schnell"
+ALLOW_POLLINATIONS_FALLBACK = "false"
+MAGIC_HOUR_API_BASE = "https://api.magichour.ai"
+MAGIC_HOUR_VIDEO_CREATE_PATH = "/v1/image-to-video"
+MAGIC_HOUR_VIDEO_STATUS_PATH = "/v1/video-projects/{id}"
+MAGIC_HOUR_VIDEO_RESOLUTION = "720p"
+MAGIC_HOUR_MUSIC_PATH = "/v1/ai-music-generator"
+MAGIC_HOUR_SFX_PATH = "/v1/sound-effects-generator"
+
+# Set secrets with `npx wrangler secret put SECRET_NAME`.
+# Do not put API keys in this file.
+
+[[ai]]
+binding = "AI"
