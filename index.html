@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fc">
+  <title>AI Film Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div id="entry-screen" class="entry-screen">
+  <div class="entry-card">
+    <div class="entry-mark">AF</div>
+    <div class="entry-kicker">CREATIVE PRODUCTION WORKSPACE</div>
+    <h1>AI Film Studio</h1>
+    <p>Create stories. Build worlds. Produce films.</p>
+    <form id="entry-auth-form">
+      <label>Email address<input id="entry-email" type="email" autocomplete="email" placeholder="developer@example.com" required></label>
+      <label>Password<input id="entry-password" type="password" autocomplete="current-password" minlength="6" placeholder="Your password" required></label>
+      <div class="entry-actions">
+        <button class="entry-primary" type="submit" id="entry-login">Developer login</button>
+        <button class="entry-secondary" type="button" id="entry-signup">Create account</button>
+      </div>
+    </form>
+    <div class="entry-divider"><span>OR</span></div>
+    <button class="entry-guest" id="guest-entry" type="button">Continue as Guest <span>→</span></button>
+    <div id="entry-status" class="entry-status">Developer account uses Supabase. Guest mode opens a local workspace.</div>
+  </div>
+</div>
+<div class="app-shell" id="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="#"><span class="brand-mark">✦</span><span>AI Film <b>Studio</b></span></a>
+    <div class="workspace-label">WORKSPACE</div>
+    <nav id="mainNav">
+      <button class="nav-item active" data-page="dashboard"><span>▦</span> Overview</button>
+      <button class="nav-item" data-page="characters"><span>♙</span> Character Studio</button>
+      <button class="nav-item" data-page="creator"><span>▶</span> Video Creator</button>
+      <button class="nav-item" data-page="editor"><span>◫</span> Film Editor</button>
+      <button class="nav-item" data-page="projects"><span>▤</span> My Projects</button>
+      <button class="nav-item" data-page="settings"><span>⚙</span> Settings</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="profile-wrap">
+        <button class="profile profile-trigger" id="profile-trigger" type="button" aria-expanded="false">
+          <div class="avatar" id="profile-avatar">AF</div><div class="profile-copy"><b id="profile-title">My Studio</b><small id="profile-subtitle">Local workspace</small></div><span class="status-dot"></span><span class="profile-chevron">⌄</span>
+        </button>
+        <div class="profile-menu" id="profile-menu" hidden>
+          <div class="profile-menu-email" id="profile-email">Guest workspace</div>
+          <button type="button" id="profile-logout">Log out</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-area">
+    <header class="topbar">
+      <div><div class="eyebrow">CREATIVE WORKSPACE</div><h1 id="pageTitle">Overview</h1></div>
+      <div class="top-actions"><span class="connection-pill"><i></i><span id="connectionText">Connections</span></span><button class="icon-button" title="Notifications">♧</button><button class="primary-button small" data-page="creator">＋ New video</button></div>
+    </header>
+
+    <section class="page active" id="page-dashboard">
+      <div class="welcome-banner"><div><span class="banner-kicker">YOUR AI PRODUCTION SPACE</span><h2>Turn your ideas into<br><em>cinematic stories.</em></h2><p>Create reusable characters, generate storyboards and scene images, then prepare your film in one workspace.</p><button class="white-button" data-page="creator">Create a video <span>→</span></button></div><div class="banner-art"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="banner-play">▶</div><div class="banner-caption">IDEA → SCENE → FILM</div></div></div>
+      <div class="section-heading"><div><h2>Your creative tools</h2><p>Everything you need to produce an AI film.</p></div></div>
+      <div class="tool-grid">
+        <button class="tool-card" data-page="characters"><span class="tool-icon lilac">♙</span><b>Character Studio</b><p>Build characters and save visual references.</p><span class="card-arrow">↗</span></button>
+        <button class="tool-card" data-page="creator"><span class="tool-icon blue">▶</span><b>AI Scene Creator</b><p>Generate storyboards and cinematic scene images.</p><span class="card-arrow">↗</span></button>
+        <button class="tool-card" data-page="editor"><span class="tool-icon peach">◫</span><b>Film Editor</b><p>Arrange scenes, dialogue and audio tracks.</p><span class="card-arrow">↗</span></button>
+        
+      </div>
+      <div class="section-heading space-top"><div><h2>Recent projects</h2><p>Your latest film work appears here.</p></div><button class="text-button" data-page="projects">View all →</button></div>
+      <div id="recentProjects" class="project-grid"><div class="empty-state">No projects yet. Start by creating your first video.</div></div>
+    </section>
+
+    <section class="page" id="page-characters">
+      <div class="page-intro"><div><h2>Your character library</h2><p>Create reusable characters with names and reference images.</p></div><button class="primary-button" id="newCharacterBtn">＋ Create character</button></div>
+      <div class="notice"><b>Character identity</b><span>Create characters manually: upload one clear 360° turnaround reference sheet and give it a unique name. Story Analysis will match story characters to this saved library. The same saved character identity is reused across scenes.</span></div>
+      <div id="characterGrid" class="character-grid"><div class="empty-state">Your saved characters will appear here.</div></div>
+      <div class="panel form-panel" id="characterForm" hidden>
+        <div class="panel-heading"><div><h3 id="characterFormTitle">Create a character</h3><p>Give your character a unique identity.</p></div><button class="icon-button" id="closeCharacterForm">✕</button></div>
+        <form id="characterCreateForm">
+          <div class="form-grid">
+            <label>Character name<input id="characterName" required maxlength="50" placeholder="e.g. Kamal"></label>
+            <label class="full">Character 360° reference image
+              <input id="characterImage" type="file" accept="image/*" required>
+              <small class="helper">Upload your own character turnaround / 360° reference sheet. This image is the character's visual identity for every scene.</small>
+            </label>
+          </div>
+          <div class="form-actions"><button type="button" class="secondary-button" id="cancelCharacter">Cancel</button><button class="primary-button" type="submit" id="saveCharacterButton">Save character</button></div>
+          <p class="helper" id="characterFormMessage">Your uploaded reference image and character name are saved to your library. Reuse the same saved character in every film.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="page" id="page-creator">
+      <div class="page-intro"><div><h2>Create a new film</h2><p>Write your complete story, analyse its characters, assign your saved character references, and build the film scenes.</p></div><span class="soft-tag">Custom duration · Text-to-storyboard</span></div>
+      <div class="creator-layout">
+        <div class="panel">
+          <div class="panel-heading"><div><h3>Project setup</h3><p>Start with a title and creative direction.</p></div></div>
+          <form id="projectForm" class="stack-form">
+            <label>Project Name<input id="projectTitle" required placeholder="e.g. The Last Hope"></label>
+            <label>Story<textarea id="projectPrompt" rows="6" placeholder="Write the complete story here: beginning, events, conflict, climax and ending..."></textarea></label>
+            <label>Overall Direction<textarea id="projectDirection" rows="4" placeholder="Describe the animation style, mood, visual look, camera style, atmosphere and creative rules..."></textarea></label>
+            <div class="character-setup-block">
+              <h3>Story character analysis <span class="soft-tag">AI assisted</span></h3>
+              <p class="helper">Analyse the script to identify named characters, then assign each one to a character you have already created in Character Studio.</p>
+              <button type="button" class="secondary-button" id="analyzeStoryBtn">✦ Analyse Story & Find Characters</button>
+              <span class="helper" id="characterAnalysisStatus">Write your Story first, then analyse it to find character names.</span>
+              <div id="storyCharacterMap" class="story-character-map"><p class="helper">Detected characters and saved-character assignments will appear here.</p></div>
+            </div>
+            <div class="two-col"><div class="language-lock"><span>Language</span><b>English</b><input id="projectLanguage" type="hidden" value="en"></div><label>Aspect ratio<select id="projectRatio"><option>16:9</option><option>9:16</option><option>1:1</option></select></label></div>
+            <label>Target duration (seconds)<input id="projectDuration" type="number" min="10" max="3600" step="5" value="300" required><small class="helper">Choose any duration from 10 seconds to 60 minutes.</small></label>
+            <button class="primary-button" type="submit">Create Project & Continue →</button>
+          </form>
+        </div>
+        <div class="panel guide-panel"><span class="tool-icon blue">✦</span><h3>How scene generation works</h3><ol><li>Write your story in the Story field.</li><li>Add visual style and creative rules in Overall Direction.</li><li>AI plans scenes to fit your target duration.</li><li>Click Analyse Story and assign every detected character to an existing saved Studio character.</li><li>Only your saved character library is used. No automatic character creation.</li><li>AI generates a cinematic still image for each scene; you can replace it by generating again or uploading your own image.</li><li>Edit, save and export your storyboard.</li></ol><div class="notice compact"><b>Production workflow</b><span>AI assists with character analysis, scene planning and scene artwork. Character identities are supplied by your saved 360° reference images. Video motion generation uses the configured video provider.</span></div></div>
+      </div>
+      <div class="panel scenes-panel" id="sceneBuilder" hidden>
+        <div class="panel-heading"><div><h3>Scene builder</h3><p>Add scene prompts and dialogue to your project.</p></div><div class="form-actions"><button class="secondary-button" id="draftScenesBtn">Draft locally</button><button class="primary-button" id="aiDraftScenesBtn">✦ Generate Story · Scenes + Artwork</button><button class="secondary-button" id="addSceneBtn">＋ Add scene</button></div></div><div class="notice compact"><b>AI storyboard assistant</b><span>AI creates a per-scene character list with each character’s action, dialogue and sound direction, then generates a still image. Saved character reference images are described in prompts but are not directly image-conditioned by this free model. Use the Scene Video Generator below to turn each scene image into a moving 480p clip. A Magic Hour API key must be configured as a Cloudflare Worker secret.</span></div>
+        <div id="sceneList"></div>
+        <div class="form-actions"><button class="secondary-button" id="exportScriptBtn">↓ Export screenplay</button><button class="secondary-button" id="exportProjectBtn">↓ Export project JSON</button><button class="primary-button" id="saveScenesBtn">Save scenes</button></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-editor">
+      <div class="page-intro"><div><h2>Film editor</h2><p>A light professional editing workspace with preview, editable scene clips, dialogue, music, SFX and manual clip controls.</p></div><button class="primary-button" id="refreshTimeline">↻ Refresh timeline</button></div>
+      <div class="editor-workspace panel">
+        <div class="editor-preview-panel">
+          <div class="editor-preview-head"><div><span class="eyebrow">PROGRAM MONITOR</span><h3 id="editorPreviewTitle">Select a scene to preview</h3></div><span class="soft-tag">Manual editing enabled</span></div>
+          <video id="editorPreview" controls playsinline></video>
+          <div class="editor-transport"><span id="editorPreviewMeta">No clip selected</span><button class="secondary-button" id="editorPreviewScene">Preview selected scene</button></div>
+        </div>
+        <div class="editor-controls">
+          <div class="panel-heading"><div><h3>Manual clip controls</h3><p>Select a clip, adjust its in/out points or change its order.</p></div></div>
+          <div class="editor-control-grid">
+            <label>Selected scene<select id="editorSelectedScene"><option value="">No scene selected</option></select></label>
+            <label>Trim in (seconds)<input id="editorTrimStart" type="number" min="0" step="0.1" value="0"></label>
+            <label>Trim out (seconds)<input id="editorTrimEnd" type="number" min="0" step="0.1" value="0"></label>
+            <div class="editor-move-actions"><button class="secondary-button" id="editorMoveLeft">← Move left</button><button class="secondary-button" id="editorMoveRight">Move right →</button></div>
+          </div>
+          <p class="helper" id="editorEditStatus">Trim values are saved with the project as edit instructions. Original generated clips remain unchanged.</p>
+        </div>
+      </div>
+      <div class="panel timeline-panel"><div class="panel-heading"><div><h3>Multi-track timeline</h3><p>Video, dialogue, music and sound effects are arranged on separate tracks.</p></div><span class="soft-tag">Scene-based timeline</span></div><div id="timeline" class="timeline"><div class="empty-state">Create a project and add scenes to see your timeline.</div></div><div class="form-actions"><button class="secondary-button" id="autoAudioAll">✦ Auto-generate music + SFX for all scenes</button><button class="secondary-button" id="editorExportScript">↓ Export screenplay</button><button class="secondary-button" id="editorExportProject">↓ Export project JSON</button></div><div id="audioGenerationStatus" class="helper">Audio is generated locally in your browser using the scene's sound direction. You can preview, replace or regenerate each track.</div><div class="timeline-legend"><span><i class="legend-video"></i> Video scenes</span><span><i class="legend-voice"></i> Dialogue / voice</span><span><i class="legend-music"></i> Music / effects</span></div></div>
+      <div class="notice"><b>Video provider credits</b><span>Cloudflare Workers AI remains free-tier limited for storyboards and still images. Magic Hour video generation uses your Magic Hour account credits. Cloudflare free AI quota does not pay for video generation. Generated clips can be previewed and downloaded per scene. Use Film Editor to add scene-aware dialogue, music and SFX, then export an audio package for final MP4 rendering.</span></div>
+    </section>
+
+    <section class="page" id="page-projects"><div class="page-intro"><div><h2>My projects</h2><p>All projects saved in this workspace.</p></div><button class="primary-button" data-page="creator">＋ New project</button></div><div id="allProjects" class="project-grid"><div class="empty-state">No saved projects yet.</div></div></section>
+
+    <section class="page" id="page-settings">
+      <div class="page-intro"><div><h2>Settings & Connections</h2><p>Manage your account and test each production service independently.</p></div></div>
+      <div class="panel settings-panel developer-access">
+        <div class="panel-heading"><div><h3>Developer access</h3><p>Sign in to your private studio workspace.</p></div><span class="soft-tag">Account</span></div>
+        <label>Email address<input id="authEmail" type="email" autocomplete="email" placeholder="developer@example.com"></label>
+        <label>Password<input id="authPassword" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters"></label>
+        <div class="form-actions" style="justify-content:flex-start"><button class="primary-button" id="signInBtn">Sign in</button><button class="secondary-button" id="signUpBtn">Create account</button><button class="secondary-button" id="signOutBtn" hidden>Sign out</button></div>
+        <span id="authStatus" class="helper">Connect the database below, then sign in.</span>
+      </div>
+      <div class="connection-grid">
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">☁</span><h3>Cloudflare Worker</h3><p>Core AI gateway and worker availability.</p></div><span class="connection-state" id="cloudflareState">Not tested</span></div><label>Worker URL<input id="aiWorkerUrl" type="url" value="https://ai-film-studio-worker.gamingthimeth.workers.dev" placeholder="https://your-worker.workers.dev"></label><div class="connection-actions"><button class="primary-button" id="saveAiWorker">Save URL</button><button class="secondary-button" id="testAiWorker">Test connection</button></div><span id="aiWorkerStatus" class="helper">Enter the Worker URL and test the connection.</span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">▤</span><h3>Database connection</h3><p>Supabase authentication, tables and storage.</p></div><span class="connection-state" id="databaseState">Not tested</span></div><label>Supabase project URL<input id="supabaseUrl" placeholder="https://your-project.supabase.co"></label><label>Supabase anon / publishable key<input id="supabaseKey" placeholder="Publishable / anon key"></label><div class="connection-actions"><button class="primary-button" id="saveSupabase">Save & connect</button><button class="secondary-button" id="testDatabase">Test database</button></div><span id="supabaseStatus" class="helper"></span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">⌕</span><h3>Data analysis</h3><p>Story character detection and script analysis.</p></div><span class="connection-state" id="analysisState">Not tested</span></div><div class="connection-detail">Cloudflare Workers AI · Live character-detection test</div><button class="secondary-button test-service" data-test-service="analysis">Run live analysis test</button><span class="helper" id="analysisStatus">Runs a small sample script through the live AI model and checks the returned character list.</span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">▧</span><h3>Image generation</h3><p>Scene still-image generation.</p></div><span class="connection-state" id="imageState">Not tested</span></div><div class="connection-detail">Cloudflare Workers AI · Image model</div><button class="secondary-button test-service" data-test-service="image">Test image connection</button><span class="helper" id="imageStatus">Checks provider capability without generating a paid image.</span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">♫</span><h3>Voice generation</h3><p>English dialogue speech generation.</p></div><span class="connection-state" id="voiceState">Not tested</span></div><div class="connection-detail">Cloudflare Workers AI · English TTS</div><button class="secondary-button test-service" data-test-service="voice">Test voice connection</button><span class="helper" id="voiceStatus">Checks voice service availability without generating audio.</span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">♬</span><h3>Sound effects (SFX)</h3><p>Browser audio engine for scene sound design.</p></div><span class="connection-state" id="sfxState">Not tested</span></div><div class="connection-detail">Web Audio API · Local audio generation</div><button class="secondary-button test-service" data-test-service="sfx">Test SFX connection</button><span class="helper" id="sfxStatus">Checks browser audio support.</span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">✧</span><h3>Motion generation</h3><p>Image-to-video motion service.</p></div><span class="connection-state" id="motionState">Not tested</span></div><div class="connection-detail">Magic Hour · LTX image-to-video</div><button class="secondary-button test-service" data-test-service="motion">Test motion connection</button><span class="helper" id="motionStatus">Checks the configured video provider credentials.</span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">▶</span><h3>Video generation</h3><p>Video provider account and credits.</p></div><span class="connection-state" id="videoState">Not tested</span></div><div class="connection-detail">Magic Hour API · Credits and generation readiness</div><button class="secondary-button test-service" data-test-service="video">Test video connection</button><span class="helper" id="videoStatus">A separate video provider connection is required.</span></article>
+        <article class="panel connection-card"><div class="connection-card-head"><div><span class="connection-icon">◫</span><h3>Video editing</h3><p>Manual preview, timeline and local media tools.</p></div><span class="connection-state" id="editingState">Not tested</span></div><div class="connection-detail">Browser media engine · Manual editing workspace</div><button class="secondary-button test-service" data-test-service="editing">Test editing connection</button><span class="helper" id="editingStatus">Checks video preview and editing capabilities in this browser.</span></article>
+      </div>
+      <div class="panel settings-panel"><h3>Connection security</h3><p class="muted">Only Supabase publishable / anon keys belong in the browser. Keep Cloudflare and video-provider secret keys in Cloudflare Worker secrets. Never paste service-role keys or provider secrets into this website.</p></div>
+    </section>
+  </main>
+</div>
+<dialog id="characterDetailsDialog" class="character-details-dialog"><div class="panel-heading"><h3 id="characterDetailsTitle">Character details</h3><button class="icon-button" id="closeCharacterDetails" type="button">✕</button></div><div id="characterDetailsBody"></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+<script src="assets/js/supabase.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
