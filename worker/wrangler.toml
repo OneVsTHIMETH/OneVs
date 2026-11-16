@@ -3,7 +3,7 @@ main = "src/index.js"
 compatibility_date = "2026-11-15"
 
 [vars]
-ALLOWED_ORIGINS = "https://onevs.pages.dev"
+ALLOWED_ORIGINS = "https://onevsthimeth.github.io"
 GEMINI_TEXT_MODEL = "gemini-2.5-flash"
 GEMINI_ANALYSIS_MODEL = "gemini-2.5-flash"
 HF_IMAGE_MODEL = "black-forest-labs/FLUX.1-schnell"
